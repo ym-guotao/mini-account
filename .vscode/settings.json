@@ -1,0 +1,12 @@
+{
+  // Set the default
+  "editor.formatOnSave": false,
+  // Enable per-language
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  // Whether to add a semicolon at the end of every line
+  "prettier.semi": false,
+  // If true, will use single instead of double quotes
+  "prettier.singleQuote": true
+}

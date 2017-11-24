@@ -1,0 +1,12 @@
+.App{
+  padding: 1em;
+}
+.card{
+  margin-top:1em;
+}
+.hide{
+  display: none;
+}
+button.disabled{
+  cursor: not-allowed;
+}
