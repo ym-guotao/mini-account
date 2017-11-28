@@ -16,11 +16,7 @@ import {
   CardBody,
   CardTitle
 } from 'reactstrap'
-import {
-  accountFormSubmit,
-  onFieldChange,
-  onRepeatPasswordFieldBlur
-} from './actions/accountForm'
+import { accountFormSubmit, onFieldChange } from './actions/accountForm'
 import './App.css'
 
 const mapStateToProps = state => ({
@@ -31,8 +27,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       accountFormSubmit,
-      onFieldChange,
-      onRepeatPasswordFieldBlur
+      onFieldChange
     },
     dispatch
   )
@@ -43,23 +38,25 @@ class App extends Component {
 
     // you can put the state that ONLY used in this component here
     this.state = {
-      showJSON: false
+      showJSON: false,
+      userNameFieldHandled: false,
+      passwordFieldHandled: false,
+      repeatPasswordFieldHandled: false,
+      phoneNumberFieldHandled: false
     }
   }
 
   static propTypes = {
     accountForm: PropTypes.object.isRequired,
     accountFormSubmit: PropTypes.func.isRequired,
-    onFieldChange: PropTypes.func.isRequired,
-    onRepeatPasswordFieldBlur: PropTypes.func.isRequired
+    onFieldChange: PropTypes.func.isRequired
   }
 
   onFieldChange(fieldName, value) {
     this.props.onFieldChange({ [fieldName]: value.trim() })
-  }
-
-  onRepeatPasswordFieldBlur(value) {
-    this.props.onRepeatPasswordFieldBlur(value.trim())
+    this.setState(() => ({
+      [`${fieldName}FieldHandled`]: true
+    }))
   }
 
   onSubmit(event) {
@@ -70,22 +67,35 @@ class App extends Component {
       password: accountForm.password,
       phoneNumber: accountForm.phoneNumber
     })
-    this.setState({ showJSON: true })
+    this.setState(() => ({
+      showJSON: true
+    }))
   }
 
   render() {
     // validation
-    const { accountForm } = this.props
+    const {
+      userName,
+      password,
+      repeatPassword,
+      phoneNumber
+    } = this.props.accountForm
+    const wrongUserName = !userName
+    const wrongPassword =
+      !/[a-z]+/.test(password) ||
+      !/[A-Z]+/.test(password) ||
+      password.length < 8
+    const wrongRepeatPassword = repeatPassword !== password
+    const wrongPhoneNumber = !/^1[3,5,6,8]\d{9}$/.test(phoneNumber)
     const btnDisable =
-      !accountForm.userName ||
-      !/[a-z]+/.test(accountForm.password) ||
-      !/[A-Z]+/.test(accountForm.password) ||
-      accountForm.password.length < 8 ||
-      accountForm.repeatPassword !== accountForm.password ||
-      !/^1[3,5,6,8]\d{9}$/.test(accountForm.phoneNumber)
+      !userName || wrongPassword || wrongRepeatPassword || wrongPhoneNumber
     return (
       <div className="App">
-        <Form onSubmit={event => this.onSubmit(event)}>
+        <h2>Register</h2>
+        <Form
+          onSubmit={event => this.onSubmit(event)}
+          className="register-form"
+        >
           <FormGroup>
             <Label for="userName">User Name</Label>
             <Input
@@ -93,11 +103,20 @@ class App extends Component {
               name="userName"
               id="userName"
               placeholder="please input your name"
-              onInput={event =>
+              onBlur={event =>
                 this.onFieldChange('userName', event.target.value)
               }
             />
-            <FormText color="muted">can not be empty.</FormText>
+            <FormText
+              color="muted"
+              className={`${
+                wrongUserName && this.state.userNameFieldHandled
+                  ? 'error'
+                  : 'error hide'
+              }`}
+            >
+              can not be empty.
+            </FormText>
           </FormGroup>
           <FormGroup>
             <Label for="password">Password</Label>
@@ -106,11 +125,18 @@ class App extends Component {
               name="password"
               id="password"
               placeholder="please input your password"
-              onInput={event =>
+              onBlur={event =>
                 this.onFieldChange('password', event.target.value)
               }
             />
-            <FormText color="muted">
+            <FormText
+              color="muted"
+              className={`${
+                wrongPassword && this.state.passwordFieldHandled
+                  ? 'error'
+                  : 'error hide'
+              }`}
+            >
               must be at least 8 characters, contain upper and lower case
               letters.
             </FormText>
@@ -123,10 +149,21 @@ class App extends Component {
               id="repeatPassword"
               placeholder="please input your password again"
               onBlur={event =>
-                this.onRepeatPasswordFieldBlur(event.target.value)
+                this.onFieldChange('repeatPassword', event.target.value)
               }
             />
+            <FormText
+              color="muted"
+              className={`${
+                wrongRepeatPassword && this.state.repeatPasswordFieldHandled
+                  ? 'error'
+                  : 'error hide'
+              }`}
+            >
+              must be the same as password field.
+            </FormText>
           </FormGroup>
+
           <FormGroup>
             <Label for="phoneNumber">PhoneNumber</Label>
             <InputGroup>
@@ -136,19 +173,28 @@ class App extends Component {
                 name="phoneNumber"
                 id="phoneNumber"
                 placeholder="please input your phone number"
-                onInput={event =>
+                onBlur={event =>
                   this.onFieldChange('phoneNumber', event.target.value)
                 }
               />
             </InputGroup>
-            <FormText color="muted">
-              must be numbers and length equal to 11.
+            <FormText
+              color="muted"
+              className={`${
+                wrongPhoneNumber && this.state.phoneNumberFieldHandled
+                  ? 'error'
+                  : 'error hide'
+              }`}
+            >
+              must match Chinese cellphone number format.
             </FormText>
           </FormGroup>
           <Button color="success" type="submit" disabled={btnDisable}>
             Submit
           </Button>
-          <Card className={this.state.showJSON ? 'card' : 'card hide'}>
+          <Card
+            className={this.state.showJSON ? 'json-card' : 'json-card hide'}
+          >
             <CardBody>
               <CardTitle>JSON format of form data</CardTitle>
               <CardText>{JSON.stringify(this.props.accountForm)}</CardText>
@@ -159,5 +205,4 @@ class App extends Component {
     )
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(App)
