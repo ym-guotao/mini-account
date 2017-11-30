@@ -201,7 +201,11 @@ class App extends Component {
             Submit
           </Button>
           <Card
-            className={this.state.showJSON ? 'json-card' : 'json-card hide'}
+            className={
+              this.state.showJSON
+                ? style.json_card
+                : `${style.json_card} ${style.hide}`
+            }
           >
             <CardBody>
               <CardTitle>JSON format of form data</CardTitle>

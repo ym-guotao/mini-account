@@ -1,7 +1,7 @@
 .App{
   padding: 1em;
 }
-.card{
+.json_card{
   margin-top:1em;
 }
 .hide{
@@ -15,4 +15,5 @@ button.disabled{
 }
 .register_form{
   background: #eee;
+  padding: 1em;
 }
