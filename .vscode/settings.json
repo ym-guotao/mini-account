@@ -5,8 +5,16 @@
   "[javascript]": {
     "editor.formatOnSave": true
   },
+
+  "javascript.validate.enable": false,
+  
   // Whether to add a semicolon at the end of every line
   "prettier.semi": false,
   // If true, will use single instead of double quotes
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+
+  
+  "stylelint.enable": true,
+  "css.validate": true,
+  "scss.validate": true
 }

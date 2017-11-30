@@ -13,3 +13,6 @@ button.disabled{
 .error{
   color: red!important;
 }
+.register_form{
+  background: #eee;
+}

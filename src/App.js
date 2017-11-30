@@ -17,7 +17,8 @@ import {
   CardTitle
 } from 'reactstrap'
 import { accountFormSubmit, onFieldChange } from './actions/accountForm'
-import './App.css'
+
+import style from './App.css'
 
 const mapStateToProps = state => ({
   accountForm: state.accountForm
@@ -33,6 +34,13 @@ const mapDispatchToProps = dispatch =>
   )
 
 class App extends Component {
+  state: {
+    showJSON: boolean,
+    userNameFieldHandled: boolean,
+    passwordFieldHandled: boolean,
+    repeatPasswordFieldHandled: boolean,
+    phoneNumberFieldHandled: boolean
+  }
   constructor(props) {
     super(props)
 
@@ -94,7 +102,7 @@ class App extends Component {
         <h2>Register</h2>
         <Form
           onSubmit={event => this.onSubmit(event)}
-          className="register-form"
+          className={style.register_form}
         >
           <FormGroup>
             <Label for="userName">User Name</Label>
