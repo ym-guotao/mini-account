@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { mount } from 'enzyme'
 import { Provider } from 'react-redux'
 
@@ -18,14 +18,15 @@ const subject = (
     <App />
   </Provider>
 )
-const wrapper = mount(subject)
 
+it('renders without crashing', () => {
+  mount(subject)
+})
+
+const wrapper = mount(subject)
 it('should insert a stringify JSON to page', () => {
   store.dispatch(onFieldChange(exampleJSON))
-  it('renders without crashing', () => {
-    wrapper
-  })
-  expect(wrapper.find('.json-card .card-text').text()).toEqual(
+  expect(wrapper.find('.result .card-text').text()).toEqual(
     JSON.stringify(exampleJSON)
   )
 })
@@ -47,7 +48,7 @@ const exampleJSON2 = {
 
 it('should save state to store when click submit', () => {
   store.dispatch(accountFormSubmit(exampleJSON2))
-  expect(wrapper.find('.json-card .card-text').text()).toEqual(
+  expect(wrapper.find('.result .card-text').text()).toEqual(
     JSON.stringify(exampleJSON2)
   )
 })

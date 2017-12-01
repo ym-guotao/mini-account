@@ -203,8 +203,8 @@ class App extends Component {
           <Card
             className={
               this.state.showJSON
-                ? style.json_card
-                : `${style.json_card} ${style.hide}`
+                ? `${style.json_card} result`
+                : `${style.json_card} ${style.hide} result`
             }
           >
             <CardBody>
