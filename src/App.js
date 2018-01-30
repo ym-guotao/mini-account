@@ -16,6 +16,9 @@ import {
   CardBody,
   CardTitle
 } from 'reactstrap'
+
+import Dialog from './components/Dialog'
+import FiberString from './components/FiberString'
 import { accountFormSubmit, onFieldChange } from './actions/accountForm'
 
 import style from './App.css'
@@ -99,6 +102,10 @@ class App extends Component {
       !userName || wrongPassword || wrongRepeatPassword || wrongPhoneNumber
     return (
       <div className="App">
+        <FiberString />
+        {/* <Dialog>
+          <h4>呵呵哒</h4>
+        </Dialog> */}
         <h2>Register</h2>
         <Form
           onSubmit={event => this.onSubmit(event)}
